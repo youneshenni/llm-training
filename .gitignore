@@ -1,3 +1,5 @@
 .venv
 memory.json
 **/example.db
+
+**/__pycache__/
