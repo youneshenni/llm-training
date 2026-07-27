@@ -5,7 +5,7 @@ from db.models import Conversation, Message, User
 
 client = anthropic.Anthropic()
 
-def conversationLoop(user: User, conversation: Conversation, session:Session):
+def conversationLoop(user: User, conversation: Conversation, dbMessages: list[Message], session: Session):
     dbMessages = session.query(Message).filter_by(conversation_id=conversation.id).all()
     messages = list(map(lambda m: {"role": m.role, "content": m.content}, dbMessages))
     while True:
