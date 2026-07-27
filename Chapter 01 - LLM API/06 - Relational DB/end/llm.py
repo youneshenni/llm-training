@@ -8,7 +8,6 @@ client = anthropic.Anthropic()
 def conversationLoop(user: User, conversation: Conversation, session:Session):
     dbMessages = session.query(Message).filter_by(conversation_id=conversation.id).all()
     messages = list(map(lambda m: {"role": m.role, "content": m.content}, dbMessages))
-    print(messages)
     while True:
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit"]:

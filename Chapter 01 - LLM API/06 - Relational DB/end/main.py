@@ -13,10 +13,15 @@ with Session(engine) as session:
         print(f"User '{username}' created: {user}")
     else:
         print(f"User '{username}' found: {user}")
-    print(f"User '{username}' is now ready to use the application.")
     conversation_name = input("Please enter a name for your conversation: ")
-    conversation = Conversation(name=conversation_name, user_id=user.id, tokens=0)
-    session.add(conversation)
+    # Search for it first
+    conversation = session.query(Conversation).filter_by(name=conversation_name, user_id=user.id).first()
+    if conversation:
+        print(f"Conversation '{conversation_name}' found: {conversation}")
+    else:
+        print(f"Conversation '{conversation_name}' not found. Creating it now...")
+        conversation = Conversation(name=conversation_name, user_id=user.id, tokens=0)
+        session.add(conversation)
     conversationLoop(user, conversation, session)
     total_tokens = sum(message.tokens for message in session.query(Message).filter_by(conversation_id=conversation.id).all())
     conversation.tokens = total_tokens
