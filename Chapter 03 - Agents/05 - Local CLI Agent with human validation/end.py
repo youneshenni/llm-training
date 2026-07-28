@@ -6,21 +6,30 @@ from langchain.tools import tool
 from langchain_ollama import ChatOllama
 
 
+from langgraph.checkpoint.memory import InMemorySaver 
+
+
 @tool
-def run_ssh_command(host: str, command: str, private_key_path: str = "~/.ssh/id_rsa") -> str:
+def run_ssh_command(host: str, command: str) -> str:
     """Run a command on a remote host via SSH.
 
     Args:
-        host (str): The hostname or IP address of the remote host.
+        host (str): The hostname or IP address of the remote host. Preferably in the format `user@hostname`.
         command (str): The command to run on the remote host.
-        private_key_path (str): Path to the private key used for authentication.
     """
+    private_key_path: str = "~/.ssh/id_rsa"
     resolved_key = Path(private_key_path).expanduser()
     if not resolved_key.is_file():
         raise RuntimeError(
             f"Private key not found at '{resolved_key}'. Provide a valid private_key_path."
         )
-
+    if input(f"""
+             Agent wants to execute the command:
+             {command}
+             on host: {host}
+             Do you validate? (Y/n)
+             """) != "Y":
+        return "Command execution aborted by user."
     completed_process = subprocess.run(
         [
             "ssh",
@@ -38,7 +47,7 @@ def run_ssh_command(host: str, command: str, private_key_path: str = "~/.ssh/id_
 
     if completed_process.returncode != 0:
         error_output = completed_process.stderr.strip()
-        raise RuntimeError(
+        return RuntimeError(
             f"SSH command failed with exit code {completed_process.returncode}: {error_output}"
         )
 
@@ -46,7 +55,7 @@ def run_ssh_command(host: str, command: str, private_key_path: str = "~/.ssh/id_
 
 
 llm = ChatOllama(
-    model="qwen3.5:4b",
+    model="qwen3.5:9b",
     validate_model_on_init=True,
     temperature=0,
 )
@@ -69,17 +78,23 @@ Thought: I now know the final answer
 Final Answer: the final answer to the original input question
 """
 
-agent = create_agent(model=llm, tools=tools, system_prompt=system_prompt)
+agent = create_agent(model=llm, tools=tools, system_prompt=system_prompt, checkpointer=InMemorySaver())
 
-stream = agent.stream_events(
-    {
-        "messages": [{"role": "user", "content": "Please run the command `uname -a` on host `llm@192.168.52.2`."}]
-    },
-    version="v3"
-)
 
-for snapshot in stream.values:
-    # Each snapshot contains the full state at that point
-    latest_message = snapshot["messages"][-1]
-    if latest_message.content:
-        print(f"{latest_message.content}")
+host = input("Enter the remote host (e.g., user@hostname): ")
+while True:
+  prompt = input("Ask a question about the remote host: ")
+  stream = agent.stream_events(
+      {
+          "messages": [{"role": "user", "content": f"{prompt} on `{host}`."}]
+      },
+      version="v3",
+      config={"thread_id": host, "parent_message_id": None}
+      
+  )
+  
+  for snapshot in stream.values:
+      # Each snapshot contains the full state at that point
+      latest_message = snapshot["messages"][-1]
+      if latest_message.content:
+          print(f"{latest_message.content}")
