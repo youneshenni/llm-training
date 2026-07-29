@@ -5,7 +5,7 @@ client = Client(
     host='127.0.0.1:11434',
 )
 
-response: ChatResponse = client.chat(model='qwen3.5:4b', messages=[
+response: ChatResponse = client.chat(model='qwen3.5:9b', messages=[
   {
     'role': 'user',
     'content': 'Why is the sky blue?',

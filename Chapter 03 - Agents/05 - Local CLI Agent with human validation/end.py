@@ -84,17 +84,21 @@ agent = create_agent(model=llm, tools=tools, system_prompt=system_prompt, checkp
 host = input("Enter the remote host (e.g., user@hostname): ")
 while True:
   prompt = input("Ask a question about the remote host: ")
-  stream = agent.stream_events(
+  stream = agent.stream(
       {
           "messages": [{"role": "user", "content": f"{prompt} on `{host}`."}]
       },
-      version="v3",
-      config={"thread_id": host, "parent_message_id": None}
+      stream_mode="values",
+      config={"configurable": {"thread_id": host}}
       
   )
   
-  for snapshot in stream.values:
+  final_ai_reply = None
+  for snapshot in stream:
       # Each snapshot contains the full state at that point
       latest_message = snapshot["messages"][-1]
-      if latest_message.content:
-          print(f"{latest_message.content}")
+      if getattr(latest_message, "type", None) == "ai" and latest_message.content:
+          final_ai_reply = latest_message.content
+
+  if final_ai_reply:
+      print(f"{final_ai_reply}")

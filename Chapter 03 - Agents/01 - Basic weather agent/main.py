@@ -33,4 +33,4 @@ for snapshot in stream.values:
         if isinstance(latest_message, HumanMessage):
             print(f"User: {latest_message.content}")
         elif isinstance(latest_message, AIMessage):
-            print(f"Agent: {latest_message.content["text"]}")
+            print(f"Agent: {latest_message.content}")

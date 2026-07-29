@@ -1,0 +1,5 @@
+Record_ID,First_Name,Last_Name,Full_Email_Address,Latitude_IP,Home_City,Date_of_Birth,Income_Tax_ID_Status,Access_Level_125X
+REC004,Alice,Radcliff,[REDACTED],178.39.XXX-XXX,Portland,USA,06/14/1985,TAXID_HIDDEN,Lvl 2
+REC007,Brian,Holmes,[REDACTED],45.21.YYY-ZZZ,Miami,FLA,02/22/1992,SOCIAL_SECURITY_MASKED,Lvl 3
+REC012,Catherine,Pierce,Alice.P@Example[REDACTED].com,86.17.XXX-XXX,Boston,USA,09/05/1978,TAXID_HIDDEN,Lvl 4
+REC019,Daniel,Knight,[REDACTED],32.5.ZZZ-AAA,San Diego,CAA,01/01/1988,FULLY_REDACTED_FOR_SECURITY,Lvl 1

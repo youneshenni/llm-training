@@ -1,0 +1,16 @@
+# Confidential Access Log // Employee Directory [CLASSIFIED]
+### Document Type: Redacted Personnel List
+**Date:** 2023-10-27  
+**Clearance Level:** INTERNAL  
+
+| ID # | Full Name (Partial) | Role / Department | Contact Information | Last Login IP [REDACTED] | Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **A01-89** | A[REDACTED], J. L.[...] | Security Ops, HQ | e.mai[l@corporate.com](mailto:...) (MASKED) | 45.*..*.23 [REDAC]T | ACTIVE |
+| **B23-X0** | S... M. K[REDACTED] | R&D / Engineering | s***@example.co[m](http://s.m.i.n.g.l.) (MASKED) | *.198.[..].45 [REDAC]T | ACTIVE |
+| **C77-2** | E... P. T[REDACTED] | HR Division | t******@company.net (MASKED) | 0.**.*.**.0* [REDAC]T | INACTIVE |
+| **D91-Y5** | L.. R. W.[REDACTED] | Finance, Audit Dept | f...***@payroll.org (MASKED) | *.243.[.]..*6 [REDAC]T | ACTIVE |
+
+---
+### Legend:
+> **[REDACTED]** / **...** indicates sensitive PII has been removed in accordance with data privacy protocols.  
+> Do not attempt to recover masked information from this document without written authorization.
